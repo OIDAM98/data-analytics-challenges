@@ -1,0 +1,123 @@
+
+version: 2
+
+sources:
+  - name: local
+    tables:
+      - name: raw_orders
+        meta:
+          external_location: "read_parquet('../data/raw/yaeatspb.parquet')"
+  - name: bq
+    database: data-eng-training-87b25bc6
+    schema: Interview_data_analysis_EDA_orders
+    tables:
+      - name: raw_orders
+
+models:
+  - name: dim_places
+    description: "All of the places that orders took place"
+    columns:
+      - name: id
+        datatype: bytes
+        description: "Unique Identifier of the place. Consisting of the Hash of all the attributes"
+        constraints:
+          - type: primary_key
+      - name: name
+        datatype: string
+        description: "Name of the place where a User can make an Order"
+      - name: street
+        datatype: string
+        description: "Street where place is located"
+      - name: house
+        datatype: string
+        description: "House related to the place"
+
+  - name: dim_users
+    description: "All of the users that have placed an order"
+    columns:
+      - name: id
+        datatype: integer
+        description: "Unique Identifier of the User. Transactional DB Generated"
+        constraints:
+          - type: primary_key
+      - name: name
+        datatype: string
+        description: "Name of the User that made an Order"
+  
+  - name: dim_time
+    description: "All of the dates that orders were placed at. In UNIX Second Epochs"
+    columns:
+      - name: id
+        datatype: integer
+        description: "Unique Identifier of the Time an Order was generated."
+        constraints:
+          - type: primary_key
+      - name: created_ts
+        datatype: timestamp
+        description: "Date and Time of an Order. No TZ information."
+        constraints:
+          - type: not_null
+      - name: created_date
+        datatype: date
+        description: "Date of an Order."
+        constraints:
+          - type: not_null
+      - name: created_year
+        datatype: integer
+        description: "Year of the Order. In #."
+        constraints:
+          - type: not_null
+      - name: created_month
+        datatype: integer
+        description: "Month of the Order. In #."
+        constraints:
+          - type: not_null
+      - name: created_month_dsc
+        datatype: string
+        description: "Month of the Order. In Calendar description."
+        constraints:
+          - type: not_null
+      - name: created_day
+        datatype: integer
+        description: "Day of the Order. In #."
+        constraints:
+          - type: not_null
+      - name: created_day_dsc
+        datatype: string
+        description: "Day of the Order. In Calendar description."
+        constraints:
+          - type: not_null
+      - name: created_time
+        datatype: time
+        description: "Time of the day of the Order."
+        constraints:
+          - type: not_null
+      - name: created_hour
+        datatype: integer
+        description: "Hour of the Order. In #."
+        constraints:
+          - type: not_null
+      - name: created_minute
+        datatype: integer
+        description: "Minutes of the Order. In #."
+        constraints:
+          - type: not_null
+
+  - name: facts_orders
+    description: "Information about all Orders placed. Grouped by Time, User and Place"
+    columns:
+      - name: time_id
+        description: "Time that the Order took place in. In UNIX Seconds Epochs."
+        datatype: integer
+      - name: place_id
+        description: "Place that the Order was taken in. In Hash."
+        datatype: bytes
+      - name: user_id
+        description: "User that put the Order. In #."
+        datatype: integer
+      - name: price
+        description: "Price of the Order"
+        datatype: integer
+      - name: num_orders
+        description: "Number of the Order"
+        datatype: integer
