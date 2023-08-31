@@ -5,7 +5,7 @@
 {% endif %}
 
 select 
-    t.id as created_id,
+    t.id as time_id,
     p.id as place_id,
     u.id as user_id,
     SUM(ro.orderprice) as price,
