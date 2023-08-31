@@ -2,7 +2,7 @@
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 'eda_orders'
+name: 'challenges'
 version: '1.0.0'
 config-version: 2
 
@@ -31,9 +31,10 @@ clean-targets:         # directories to be removed by `dbt clean`
 # directory as views. These settings can be overridden in the individual model
 # files using the `{{ config(...) }}` macro.
 models:
-  eda_orders:
+  challenges:
+    eda_orders:
     # Config indicated by + and applies to all files under models/example/
-    dimensions:
-      +materialized: table
-    facts:
-      +materialized: table
+      dimensions:
+        +materialized: table
+      facts:
+        +materialized: table
